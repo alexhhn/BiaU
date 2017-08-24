@@ -1,17 +1,31 @@
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, FlatList, TextInput } from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  TouchableHighlight,
+} from 'react-native';
 import { addPlayer } from '../../actions/players';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from 'react-native-modalbox';
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 class Home extends Component {
   state = {
-    playerName: 'No name',
+    playerName: '',
+    points: 0,
   };
 
   _handlePlayerName = text => {
     this.setState({ playerName: text });
+  };
+
+  _handlePoints = text => {
+    this.setState({ points: text });
   };
 
   _onAddPlayer = () => {
@@ -20,7 +34,7 @@ class Home extends Component {
   };
 
   _renderAddPlayerModal = () =>
-    <Modal style={styles.modal} ref={'addPlayerModal'} swipeToClose={true} position="center">
+    <Modal style={styles.modal} ref={'addPlayerModal'} swipeToClose={true} position="top">
       <TextInput
         placeholder="Player Name"
         autoCorrect={false}
@@ -34,31 +48,58 @@ class Home extends Component {
         onChangeText={this._handlePlayerName}
         autoFocus={true}
       />
-      <Button title="Add" onPress={() => this._onAddPlayer()} />
+      <Button title="Confirm" onPress={() => this._onAddPlayer()} />
+    </Modal>;
+
+  _renderAddPointsModal = () =>
+    <Modal style={styles.modal} ref={'addPointsModal'} swipeToClose={true} position="top">
+      <TextInput
+        placeholder="0"
+        autoCorrect={false}
+        style={{
+          width: 30,
+          marginBottom: 20,
+          fontSize: 30,
+          padding: 5,
+        }}
+        onChangeText={this._handlePoints}
+        autoFocus={true}
+        keyboardType="numeric"
+      />
+      <Button title="Confirm" onPress={() => this._onAddPlayer()} />
     </Modal>;
 
   render() {
     return (
       <View style={styles.container}>
-        <View>
+        <View style={{ alignItems: 'center' }}>
           <Text style={styles.title}>Players </Text>
           <FlatList
             style={styles.list}
             data={this.props.players}
             keyExtractor={(item, index) => item.id}
+            horizontal={true}
             renderItem={({ item }) =>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.item}>
+              <View style={styles.item}>
+                <Text>
                   {item.name}
                 </Text>
                 <Text>
                   {item.point}
                 </Text>
+                <TouchableHighlight onPress={() => this.refs.addPointsModal.open()}>
+                  <FontAwesome style={{ fontSize: 30, color: 'red' }}>
+                    {Icons.history}
+                  </FontAwesome>
+                </TouchableHighlight>
               </View>}
           />
         </View>
         <Button title="New Player" onPress={() => this.refs.addPlayerModal.open()} />
+        <Button title="Ready" onPress={() => {}} />
+
         {this._renderAddPlayerModal()}
+        {this._renderAddPointsModal()}
       </View>
     );
   }
@@ -79,14 +120,19 @@ const styles = StyleSheet.create({
   },
 
   list: {
-    maxHeight: '50%',
+    maxHeight: '80%',
+    width: '90%',
   },
 
   item: {
-    width: '70%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%',
+    justifyContent: 'space-between',
   },
 
   modal: {
+    marginTop: 100,
     justifyContent: 'center',
     alignItems: 'center',
     height: 300,

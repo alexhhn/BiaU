@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import Home from './containers/home';
+import Reset from './containers/reset';
+
 import allReducers from './reducers';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -13,7 +15,7 @@ export default class BiaU extends Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <Home />
+          <Reset />
         </View>
       </Provider>
     );
