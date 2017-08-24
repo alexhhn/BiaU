@@ -11,6 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+import { Link } from 'react-router-native';
 
 class Reset extends Component {
   _onAddPlayer = () => {};
@@ -34,6 +35,9 @@ class Reset extends Component {
           />
           <Button title="Confirm" onPress={() => this._onAddPlayer()} />
         </View>
+        <Link to="/home">
+          <Text>Ready</Text>
+        </Link>
         <Button title="Ready" onPress={() => this._onAddPlayer()} />
       </View>
     );

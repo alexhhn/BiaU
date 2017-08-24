@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from 'react-native-modalbox';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+import { Link } from 'react-router-native';
 
 class Home extends Component {
   state = {
@@ -96,7 +97,7 @@ class Home extends Component {
           />
         </View>
         <Button title="New Player" onPress={() => this.refs.addPlayerModal.open()} />
-        <Button title="Ready" onPress={() => {}} />
+        <Button title="Reset" onPress={() => {}} />
 
         {this._renderAddPlayerModal()}
         {this._renderAddPointsModal()}

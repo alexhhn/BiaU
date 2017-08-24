@@ -8,15 +8,19 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 
+import { NativeRouter, Route } from 'react-router-native';
 const logger = createLogger();
 const store = createStore(allReducers, applyMiddleware(logger));
 export default class BiaU extends Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <Reset />
-        </View>
+        <NativeRouter>
+          <View style={styles.container}>
+            <Route exact path="/" component={Reset} />
+            <Route path="/home" component={Home} />
+          </View>
+        </NativeRouter>
       </Provider>
     );
   }
