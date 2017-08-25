@@ -16,15 +16,6 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { Link } from 'react-router-native';
 
 class Home extends Component {
-  state = {
-    playerName: '',
-    points: 0,
-  };
-
-  _handlePlayerName = text => {
-    this.setState({ playerName: text });
-  };
-
   _handlePoints = text => {
     this.setState({ points: text });
   };
@@ -73,13 +64,23 @@ class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.title}>Players </Text>
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              padding: 20,
+              width: 300,
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text>Name</Text>
+            <Text>Points</Text>
+          </View>
+
           <FlatList
             style={styles.list}
             data={this.props.players}
             keyExtractor={(item, index) => item.id}
-            horizontal={true}
             renderItem={({ item }) =>
               <View style={styles.item}>
                 <Text>
@@ -90,14 +91,16 @@ class Home extends Component {
                 </Text>
                 <TouchableHighlight onPress={() => this.refs.addPointsModal.open()}>
                   <FontAwesome style={{ fontSize: 30, color: 'red' }}>
-                    {Icons.history}
+                    {Icons.pencil}
                   </FontAwesome>
                 </TouchableHighlight>
               </View>}
           />
         </View>
-        <Button title="New Player" onPress={() => this.refs.addPlayerModal.open()} />
-        <Button title="Reset" onPress={() => {}} />
+        <Button title="Add points" onPress={() => this.refs.addPlayerModal.open()} />
+        <Link to="/">
+          <Text>Reset</Text>
+        </Link>
 
         {this._renderAddPlayerModal()}
         {this._renderAddPointsModal()}
@@ -126,9 +129,9 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
-    height: '100%',
+    width: 300,
     justifyContent: 'space-between',
   },
 

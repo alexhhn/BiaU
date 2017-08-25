@@ -2,25 +2,52 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  Button,
   StyleSheet,
   FlatList,
   TextInput,
   TouchableHighlight,
+  Button,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { Link } from 'react-router-native';
+import { addPlayer } from '../../actions/players';
 
 class Reset extends Component {
-  _onAddPlayer = () => {};
+  state = {
+    playerName: '',
+  };
+
+  _handlePlayerName = text => {
+    this.setState({ playerName: text });
+  };
+
+  _onAddPlayer = () => {
+    this.setState({ playerName: '' });
+    this._nameInput.setNativeProps({ text: '' });
+    this.props.addPlayer(this.state.playerName);
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>hei</Text>
+        <Text style={styles.title}>Insert player names</Text>
         <View>
+          <FlatList
+            style={styles.list}
+            data={this.props.players}
+            keyExtractor={(item, index) => item.id}
+            renderItem={({ item }) =>
+              <View style={styles.items}>
+                <Text style={styles.item}>
+                  {item.name}
+                </Text>
+              </View>}
+          />
+
           <TextInput
+            ref={component => (this._nameInput = component)}
             placeholder="Player Name"
             autoCorrect={false}
             style={{
@@ -38,7 +65,6 @@ class Reset extends Component {
         <Link to="/home">
           <Text>Ready</Text>
         </Link>
-        <Button title="Ready" onPress={() => this._onAddPlayer()} />
       </View>
     );
   }
@@ -53,21 +79,23 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    paddingTop: 22,
+    padding: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
 
   list: {
-    maxHeight: '80%',
+    maxHeight: '60%',
     width: '90%',
   },
 
-  item: {
+  items: {
     flexDirection: 'column',
-    alignItems: 'center',
-    height: '100%',
-    justifyContent: 'space-between',
+  },
+
+  item: {
+    fontSize: 18,
+    marginBottom: 8,
   },
 
   modal: {
@@ -80,11 +108,11 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return {};
+  return { players: state.players };
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({ addPlayer }, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(Reset);
